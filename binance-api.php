@@ -9,6 +9,8 @@ class Api{
   protected $info = [
     'timeOffset'=>0
   ];
+  protected $httpDebug=false;
+  protected $curlOpts = [];
 
   public function __construct($api_key, $api_secret)
   {
