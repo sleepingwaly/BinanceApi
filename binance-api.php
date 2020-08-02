@@ -212,7 +212,7 @@ class Api{
   /*=================杠杆账户和交易接口 START====================*/
 
 
-  public function marginHistory(string $symbol, bool $isIsolated=FALSE, $startTime=null, $endTime=null, $fromId=null, int $limit=500, $recvWindow=null)
+  public function marginHistory(string $symbol, string $isIsolated='FALSE', $startTime=null, $endTime=null, $fromId=null, int $limit=500, $recvWindow=null)
   {
     
     $params = [
@@ -226,7 +226,7 @@ class Api{
     ];
     $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
     $params['timestamp'] = number_format($ts, 0, '.', '');
-
+    print_r($params);
     return $this->httpRequest("/sapi/v1/margin/myTrades", "GET", $params, true);
   }
 
