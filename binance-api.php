@@ -209,6 +209,25 @@ class Api{
 
   /*====================行情接口 END=====================*/
 
+  /*=================现货账户和交易接口 START====================*/
+
+  public function spotHistory(string $symbol, $startTime=null, $endTime=null, $fromId=null, int $limit=500, $recvWindow=null)
+  {
+    $params = [
+      'symbol'  => $symbol,
+      'startTime'   => $startTime,
+      'endTime'     => $endTime,
+      'fromId'      => $fromId,
+      'limit'       => $limit,
+      'recvWindow'  => $recvWindow
+    ];
+    $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
+    $params['timestamp'] = number_format($ts, 0, '.', '');
+    return $this->httpRequest("/api/v3/myTrades", "GET", $params, true);
+  }
+
+  /*=================现货账户和交易接口 END====================*/
+
   /*=================杠杆账户和交易接口 START====================*/
 
 
