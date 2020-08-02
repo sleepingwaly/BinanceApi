@@ -251,6 +251,16 @@ class Api{
 
   /*=================杠杆账户和交易接口 START====================*/
 
+  public function marginAccount($recvWindow=null)
+  {
+    $params = [
+      'recvWindow' => $recvWindow
+    ];
+    $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
+    $params['timestamp'] = number_format($ts, 0, '.', '');
+    return $this->httpRequest("/sapi/v1/margin/account", "GET", $params, true);
+  }
+
 
   public function marginHistory(string $symbol, string $isIsolated='FALSE', $startTime=null, $endTime=null, $fromId=null, int $limit=500, $recvWindow=null)
   {
