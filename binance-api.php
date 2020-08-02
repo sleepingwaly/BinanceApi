@@ -211,6 +211,27 @@ class Api{
 
   /*=================现货账户和交易接口 START====================*/
 
+
+  public function spotAccount($recvWindow=null)
+  {
+    $params = [
+      'recvWindow' => $recvWindow
+    ];
+    $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
+    $params['timestamp'] = number_format($ts, 0, '.', '');
+    return $this->httpRequest("/api/v3/account", "GET", $params, true);
+  }
+  /**
+   * 获取账户指定交易对的成交历史
+   * 如果设定 fromId , 获取订单 >= fromId. 否则返回最近订单。
+   * @param  string      $symbol     [description]
+   * @param  [type]      $startTime  [description]
+   * @param  [type]      $endTime    [description]
+   * @param  [type]      $fromId     [起始Trade id。 默认获取最新交易。]
+   * @param  int|integer $limit      [description]
+   * @param  [type]      $recvWindow [description]
+   * @return [type]                  [description]
+   */
   public function spotHistory(string $symbol, $startTime=null, $endTime=null, $fromId=null, int $limit=500, $recvWindow=null)
   {
     $params = [
