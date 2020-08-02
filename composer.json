@@ -5,7 +5,7 @@
     "licence": "MIT",
     "require": {
         "php": ">=7.0",
-        "ext_curl": "*"
+        "ext-curl": "*"
     },
     "authors": [
         {
