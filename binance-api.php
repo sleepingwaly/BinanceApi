@@ -338,6 +338,61 @@ class Api{
 
 
 
+/*=================币本位合约接口 START====================*/
+
+  public function dBalance($recvWindow=null)
+  {
+    $params = [
+      'recvWindow' => $recvWindow
+    ];
+    $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
+    $params['timestamp'] = number_format($ts, 0, '.', '');
+    return $this->httpRequest("/dapi/v1/balance", "GET", $params, true);
+  }
+
+  public function dAccount($recvWindow=null)
+  {
+    $params = [
+      'recvWindow' => $recvWindow
+    ];
+    $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
+    $params['timestamp'] = number_format($ts, 0, '.', '');
+    return $this->httpRequest("/dapi/v1/account", "GET", $params, true);
+  }
+  
+  /**
+   * 获取成交历史
+   * symbol 或 pair 其中一个必传
+   * symbol 和 pair 不可同时提供
+   * fromId 和 pair 不可同时提供
+   * @param  string      $symbol     [description]
+   * @param  string      $pair     [description]
+   * @param  [type]      $startTime  [description]
+   * @param  [type]      $endTime    [description]
+   * @param  [type]      $fromId     [description]
+   * @param  int|integer $limit      [description]
+   * @param  [type]      $recvWindow [description]
+   * @return [type]                  [description]
+   */
+  public function dUserTrades(string $symbol, string $pair, $startTime=null, $endTime=null, $fromId=null, int $limit=500, $recvWindow=null)
+  {
+    $params = [
+      'symbol'  => $symbol,
+      'pair'    => $pair,
+      'startTime'   => $startTime,
+      'endTime'     => $endTime,
+      'fromId'      => $fromId,
+      'limit'       => $limit,
+      'recvWindow'  => $recvWindow
+    ];
+    $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
+    $params['timestamp'] = number_format($ts, 0, '.', '');
+    return $this->httpRequest("/dapi/v1/userTrades", "GET", $params, true);
+  }
+
+  /*=================币本位合约接口 END====================*/
+
+
   protected function httpRequest(string $url, string $method = "GET", array $params = [], bool $signed = false)
   {
       if (function_exists('curl_init') === false) {
