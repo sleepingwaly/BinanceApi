@@ -288,6 +288,55 @@ class Api{
 
   /*=================杠杆账户和交易接口 END=====================*/
 
+  /*=================USDT合约接口 START====================*/
+
+  public function fBalance($recvWindow=null)
+  {
+    $params = [
+      'recvWindow' => $recvWindow
+    ];
+    $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
+    $params['timestamp'] = number_format($ts, 0, '.', '');
+    return $this->httpRequest("/fapi/v2/balance", "GET", $params, true);
+  }
+
+  public function fAccount($recvWindow=null)
+  {
+    $params = [
+      'recvWindow' => $recvWindow
+    ];
+    $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
+    $params['timestamp'] = number_format($ts, 0, '.', '');
+    return $this->httpRequest("/fapi/v2/account", "GET", $params, true);
+  }
+  /**
+   * 获取某交易对的成交历史
+   * @param  string      $symbol     [description]
+   * @param  [type]      $startTime  [description]
+   * @param  [type]      $endTime    [description]
+   * @param  [type]      $fromId     [description]
+   * @param  int|integer $limit      [description]
+   * @param  [type]      $recvWindow [description]
+   * @return [type]                  [description]
+   */
+  public function fUserTrades(string $symbol, $startTime=null, $endTime=null, $fromId=null, int $limit=500, $recvWindow=null)
+  {
+    $params = [
+      'symbol'  => $symbol,
+      'startTime'   => $startTime,
+      'endTime'     => $endTime,
+      'fromId'      => $fromId,
+      'limit'       => $limit,
+      'recvWindow'  => $recvWindow
+    ];
+    $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
+    $params['timestamp'] = number_format($ts, 0, '.', '');
+    return $this->httpRequest("/fapi/v1/userTrades", "GET", $params, true);
+  }
+
+  /*=================USDT合约接口 END====================*/
+
+
 
   protected function httpRequest(string $url, string $method = "GET", array $params = [], bool $signed = false)
   {
