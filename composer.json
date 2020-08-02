@@ -2,7 +2,7 @@
     "name": "sleepingwaly/binance-api",
     "description": "binance api",
     "type": "library",
-    "licence": "MIT",
+    "license": "MIT",
     "require": {
         "php": ">=7.0",
         "ext-curl": "*"
