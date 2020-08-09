@@ -4,6 +4,8 @@ namespace Binance;
 class Api{
 
   protected $base = 'https://api.binance.com';
+  protected $fbase = 'https://fapi.binance.com';
+  protected $dbase = 'https://dapi.binance.com'
   protected $api_key;
   protected $api_secret;
   protected $info = [
@@ -276,7 +278,6 @@ class Api{
     ];
     $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
     $params['timestamp'] = number_format($ts, 0, '.', '');
-    print_r($params);
     return $this->httpRequest("/sapi/v1/margin/myTrades", "GET", $params, true);
   }
 
@@ -297,7 +298,7 @@ class Api{
     ];
     $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
     $params['timestamp'] = number_format($ts, 0, '.', '');
-    return $this->httpRequest("/fapi/v2/balance", "GET", $params, true);
+    return $this->httpRequest("/fapi/v2/balance", "GET", $params, true, 'fbase');
   }
 
   public function fAccount($recvWindow=null)
@@ -307,7 +308,7 @@ class Api{
     ];
     $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
     $params['timestamp'] = number_format($ts, 0, '.', '');
-    return $this->httpRequest("/fapi/v2/account", "GET", $params, true);
+    return $this->httpRequest("/fapi/v2/account", "GET", $params, true, 'fbase');
   }
   /**
    * 获取某交易对的成交历史
@@ -331,7 +332,7 @@ class Api{
     ];
     $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
     $params['timestamp'] = number_format($ts, 0, '.', '');
-    return $this->httpRequest("/fapi/v1/userTrades", "GET", $params, true);
+    return $this->httpRequest("/fapi/v1/userTrades", "GET", $params, true, 'fbase');
   }
 
   /*=================USDT合约接口 END====================*/
@@ -357,9 +358,9 @@ class Api{
     ];
     $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
     $params['timestamp'] = number_format($ts, 0, '.', '');
-    return $this->httpRequest("/dapi/v1/account", "GET", $params, true);
+    return $this->httpRequest("/dapi/v1/account", "GET", $params, true, 'dbase');
   }
-  
+
   /**
    * 获取成交历史
    * symbol 或 pair 其中一个必传
@@ -387,13 +388,13 @@ class Api{
     ];
     $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
     $params['timestamp'] = number_format($ts, 0, '.', '');
-    return $this->httpRequest("/dapi/v1/userTrades", "GET", $params, true);
+    return $this->httpRequest("/dapi/v1/userTrades", "GET", $params, true, 'dbase');
   }
 
   /*=================币本位合约接口 END====================*/
 
 
-  protected function httpRequest(string $url, string $method = "GET", array $params = [], bool $signed = false)
+  protected function httpRequest(string $url, string $method = "GET", array $params = [], bool $signed = false, string $base = 'base')
   {
       if (function_exists('curl_init') === false) {
           throw new \Exception("Sorry cURL is not installed!");
@@ -414,7 +415,7 @@ class Api{
               throw new \Exception("signedRequest error: API Secret not set!");
           }
 
-          $base = $this->base;
+          $base = $this->$base;
           $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
           $params['timestamp'] = number_format($ts, 0, '.', '');
           
@@ -433,11 +434,11 @@ class Api{
       }
       // params so buildquery string and append to url
       else if (count($params) > 0) {
-          curl_setopt($curl, CURLOPT_URL, $this->base . $url . '?' . $query);
+          curl_setopt($curl, CURLOPT_URL, $this->$base . $url . '?' . $query);
       }
       // no params so just the base url
       else {
-          curl_setopt($curl, CURLOPT_URL, $this->base . $url);
+          curl_setopt($curl, CURLOPT_URL, $this->$base . $url);
       }
       curl_setopt($curl, CURLOPT_HTTPHEADER, array(
           'X-MBX-APIKEY: ' . $this->api_key,
