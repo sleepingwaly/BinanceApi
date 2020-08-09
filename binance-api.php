@@ -5,7 +5,7 @@ class Api{
 
   protected $base = 'https://api.binance.com';
   protected $fbase = 'https://fapi.binance.com';
-  protected $dbase = 'https://dapi.binance.com'
+  protected $dbase = 'https://dapi.binance.com';
   protected $api_key;
   protected $api_secret;
   protected $info = [
