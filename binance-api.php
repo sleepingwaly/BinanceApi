@@ -310,6 +310,48 @@ class Api{
     $params['timestamp'] = number_format($ts, 0, '.', '');
     return $this->httpRequest("/fapi/v2/account", "GET", $params, true, 'fbase');
   }
+
+  /**
+   * 用户持仓风险V2
+   * @param  string $symbol     [description]
+   * @param  [type] $recvWindow [description]
+   * @return [type]             [description]
+   */
+  public function fPositionRisk(string $symbol='', $recvWindow=null)
+  {
+    $params = [
+      'symbol'     => $symbol,
+      'recvWindow' => $recvWindow
+    ];
+    $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
+    $params['timestamp'] = number_format($ts, 0, '.', '');
+    return $this->httpRequest("/fapi/v2/positionRisk", "GET", $params, true, 'fbase');
+  }
+  /**
+   * 获取账户损益资金流水
+   * 如果incomeType没有发送，返回所有类型账户损益资金流水。
+   * @param  string      $symbol     [description]
+   * @param  string      $incomeType [收益类型 "TRANSFER"，"WELCOME_BONUS", "REALIZED_PNL"，"FUNDING_FEE", "COMMISSION", and "INSURANCE_CLEAR"]
+   * @param  [type]      $startTime  [description]
+   * @param  [type]      $endTime    [description]
+   * @param  int|integer $limit      [description]
+   * @param  [type]      $recvWindow [description]
+   * @return [type]                  [description]
+   */
+  public function fIncome(string $symbol='', string $incomeType='', $startTime=null, $endTime=null, int $limit=100, $recvWindow=null)
+  {
+    $params = [
+      'symbol'  => $symbol,
+      'incomeType'  => $incomeType,
+      'startTime'   => $startTime,
+      'endTime'     => $endTime,
+      'limit'       => $limit,
+      'recvWindow'  => $recvWindow
+    ];
+    $ts = (microtime(true) * 1000) + $this->info['timeOffset'];
+    $params['timestamp'] = number_format($ts, 0, '.', '');
+    return $this->httpRequest("/fapi/v1/income", "GET", $params, true, 'fbase');
+  }
   /**
    * 获取某交易对的成交历史
    * @param  string      $symbol     [description]
@@ -375,7 +417,7 @@ class Api{
    * @param  [type]      $recvWindow [description]
    * @return [type]                  [description]
    */
-  public function dUserTrades(string $symbol, string $pair, $startTime=null, $endTime=null, $fromId=null, int $limit=500, $recvWindow=null)
+  public function dUserTrades(string $symbol='', string $pair='', $startTime=null, $endTime=null, $fromId=null, int $limit=500, $recvWindow=null)
   {
     $params = [
       'symbol'  => $symbol,
